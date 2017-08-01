@@ -5,5 +5,6 @@ class Student:
 		self.classification = classification
 		self.phone=phone
 		self.email = email
+		self.affiliation = None
 	def __str__(self): 
 		return "{} \n {} \n {} \n {} \n {} \n\n".format(self.name, self.major, self.classification, self.phone, self.email)
