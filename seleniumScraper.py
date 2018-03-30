@@ -110,28 +110,8 @@ def copyStudentInfo():
 	writePersonToFile(name, major, email)
 
 
-			
+		
 
-def signInToShibboleth(): 
-	time.sleep(2)
-	if(getId('okta-signin-username')):
-		driver.find_element_by_xpath('//*[@id="okta-signin-username"]').send_keys(credentials[0])
-		# for input in inputs: 
-	if(getId('okta-signin-password')):	
-		driver.find_element_by_id('okta-signin-password').send_keys(credentials[1])
-	if(getId('okta-signin-submit')):
-		driver.find_element_by_id('okta-signin-submit').click()
-
-
-
-
-def getCombination(length=2): 
-	result = []
-	for guess in itertools.product(): 
-		for num_length in range(0, length): 
-			for num_length in itertools.combinations_with_replacement(string.digits, num_length): 
-				guess = ''.join(guess)
-				result.append(guess)
 
 
 def navigate_back_to_search():
@@ -151,37 +131,33 @@ def search_letter_combo(letters):
 
 
 def get_people_listings(): 
-	ulList = driver.find_element_by_class_name('dir-Listing')
-	items = ulList.find_elements_by_tag_name('li')
+	items = []
+	try:	
+		ulList = driver.find_element_by_class_name('dir-Listing')
+		items = ulList.find_elements_by_tag_name('li')
+	except:
+		print "No people match this search"
+	else:
+		return items
+
 	return items
 
 def get_page_listings(): 
-	pages = driver.find_element_by_class_name('wd-Pagination')
-	pageList = pages.find_elements_by_tag_name('li')
-	if len(pageList) > 11 : 
-		del pageList[11:len(pageList)]
-	del pageList[0]
+	pageList = []
+	try:
+		pages = driver.find_element_by_class_name('wd-Pagination')
+		pageList = pages.find_elements_by_tag_name('li')
+		if len(pageList) > 11 : 
+			del pageList[11:len(pageList)]
+		if(len(pageList) >= 1):
+			del pageList[0]
+	except:
+		print "Pagination item does not exist"
+	else: 
+		return pageList
+
 	return pageList
 
-def log_me_in(item): 
-	item.click()
-	if(getClass('right-buttons')):
-		# if(getClassBy)
-		if(getXPath('//*[@id="content"]/div/div[1]/a')):
-			driver.find_element_by_xpath('//*[@id="content"]/div/div[1]/a').click()
-			signInToShibboleth()
-			time.sleep(2)
-			# Click the new search button
-			navigate_back_to_search()
-		else:
-			goBack()
-	else:
-		goBack()
-
-def login(): 
-	search_letter_combo("aa")
-	items = get_people_listings()
-	log_me_in(items[0])
 	
 def open_all_pages(): 
 	pageList = get_page_listings()
@@ -196,30 +172,14 @@ def loop_through_pages(pageCount):
 	global foot_hold_windows
 	foot_hold_windows = driver.window_handles
 
-	# for handle in driver.window_handles[1:len(driver.window_handles)]:
 	for handle in foot_hold_windows:
 		if(handle != main_window):
 			driver.switch_to_window(handle)
-			# foot_hold_window = len(driver.window_handles)-1
 			get_people_info()
-			# close_window()
-			# foot_hold_windows.remove(handle)
-			
-
-	# get_people_info()
-	# driver.switch_to_window(main_window)
-	# pageList = get_page_listings()
-	# for page in pageList: 	
-	# 	anchor = page.find_element_by_tag_name('a')
-	# 	open_in_new_page(anchor)
-	# 	close_window()
-	# 	main_window = driver.current_window_handle
-	# 	get_people_info()
-		# switch_window_get_student_info_and_close()
+		
 	
 
 def switch_window_get_student_info_and_close():
-	# driver.switch_to_window(driver.window_handles[len(driver.window_handles)-1])
 	for handle in driver.window_handles:
 		if(handle != main_window):
 			driver.switch_to_window(handle)
@@ -240,25 +200,14 @@ def get_student_info_from_open_pages(count):
 		if handle not in foot_hold_windows:
 			driver.switch_to_window(handle)
 			copyStudentInfo()
-			# time.sleep(1)
 			close_window()
-		# count -= 1
-	# else:
-		# break;
 
 
 
 def get_people_info():
 	items = get_people_listings()
 	for item in items: 
-		# item.click()
 		open_in_new_page(item.find_element_by_tag_name("a"))
-		# move_to_right_one_tab()
-		# time.sleep(3)
-		# copyStudentInfo()
-		# close_window()
-		# Go back to the page with all the directory listings so we can keep using these items
-		# goBack()
 	get_student_info_from_open_pages(len(items))
 
 
@@ -271,6 +220,39 @@ def remove_all_foot_hold_elements_that_are_not_main_window():
 			driver.switch_to_window(window)
 			close_window()
 
+
+def signInToShibboleth(): 
+	time.sleep(2)
+	if(getId('okta-signin-username')):
+		driver.find_element_by_xpath('//*[@id="okta-signin-username"]').send_keys(credentials[0])
+		# for input in inputs: 
+	if(getId('okta-signin-password')):	
+		driver.find_element_by_id('okta-signin-password').send_keys(credentials[1])
+	if(getId('okta-signin-submit')):
+		driver.find_element_by_id('okta-signin-submit').click()
+
+
+def log_me_in(item): 
+	item.click()
+	if(getClass('right-buttons')):
+		# if(getClassBy)
+		if(getXPath('//*[@id="content"]/div/div[1]/a')):
+			driver.find_element_by_xpath('//*[@id="content"]/div/div[1]/a').click()
+			signInToShibboleth()
+			time.sleep(2)
+			# Click the new search button
+			navigate_back_to_search()
+		else:
+			goBack()
+	else:
+		goBack()
+
+def login(): 
+	search_letter_combo("aa")
+	items = get_people_listings()
+	log_me_in(items[0])
+
+
 def main(): 
 	getCredentials()
 	setUpDriver()
@@ -279,11 +261,14 @@ def main():
 
 	# all possible two letter character combinations
 	characters = [''.join(i) for i in itertools.product(string.ascii_lowercase, repeat = 2)]
+	# characters = ["uv", "uw", "ux", "uy", "uz"]
 
 	global main_window
 	main_window = driver.current_window_handle
 	# driver.switch_to_frame('mainFrame')
 	for combo in characters: 
+		print combo
+		print "\n\n"
 		driver.switch_to_window(main_window)
 		search_letter_combo(combo)
 
@@ -327,6 +312,8 @@ def getName(element_name):
 	    return True
 	except TimeoutException:
 	    print "Timed out waiting for page to load"
+	else: 
+		return True
 
 def getId(element_id): 
 	try:
