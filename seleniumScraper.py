@@ -14,8 +14,12 @@ from StudentModel import Student
 
 
 path_to_chromedriver = './chromedriver2.37' # change path as needed
+<<<<<<< HEAD
 file_path = "../directory"
 file = "a"
+=======
+
+>>>>>>> df173061d9f33f3b168d80ecad20ee9b86d4f684
 
 credentials = []
 
@@ -69,6 +73,7 @@ def close_window():
 	driver.close()
 
 
+<<<<<<< HEAD
 def writePersonToFile(name, personItems): 
 	global file
 	file_handle = open("{}{}{}".format(file_path, file, ".txt"), "a")
@@ -77,6 +82,15 @@ def writePersonToFile(name, personItems):
 		file_handle.write("{} \n".format(item.text))
 	file_handle.write("\n\n")
 	file_handle.close()
+=======
+def writePersonToFile(name, major, email): 
+	file = open("../directory.txt", "a")
+	# file.write("{} \n {} \n {} \n {} \n {} \n\n".format(person.name, person.major, person.classification, person.phone, person.email))
+	file.write("{} \n {} \n {} \n\n".format(name, major, email))
+	# file.write(email + "\n")
+	# file.write(person)
+	file.close()
+>>>>>>> df173061d9f33f3b168d80ecad20ee9b86d4f684
 
 
 
@@ -86,9 +100,40 @@ def copyStudentInfo():
 	personItems = []
 	personItems = driver.find_elements_by_class_name('dir-Person-item')
 
+<<<<<<< HEAD
 	name = driver.find_element_by_tag_name('h1').text
 
 	writePersonToFile(name, personItems)
+=======
+	# for item in personItems: 
+	# 	if(person.major == None): 
+	# 		person.major = item.text 
+	# 	elif(person.classification == None):
+	# 		person.classification = item.text
+	# 	elif(person.phone == None): 
+	# 		person.phone = item.text
+	# 	elif(person.email ==None): 
+	# 		person.email = item.text
+	name = driver.find_element_by_tag_name('h1').text
+	
+	email = None
+	major = None
+
+	if(len(personItems) >= 3):
+		major = personItems[0].text 
+		email = personItems[-2].text
+	elif(len(personItems) >=2):
+		major = personItems[0]
+		email = personItems[-2].text
+	elif(len(personItems) >=1): 
+		major = personItems[0].text
+
+	writePersonToFile(name, major, email)
+
+
+		
+
+>>>>>>> df173061d9f33f3b168d80ecad20ee9b86d4f684
 
 
 def navigate_back_to_search():
@@ -98,6 +143,10 @@ def navigate_back_to_search():
 
 		
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> df173061d9f33f3b168d80ecad20ee9b86d4f684
 def search_letter_combo(letters):
 	driver.find_element_by_id('individuals').clear()
 	driver.find_element_by_id('individuals').send_keys(letters)
@@ -236,15 +285,23 @@ def main():
 	login()
 
 	# all possible two letter character combinations
+<<<<<<< HEAD
 	# characters = [''.join(i) for i in itertools.product(string.ascii_lowercase, repeat = 2)]
 	characters = ["ab", "bw", "cx", "dy", "ez"]
+=======
+	characters = [''.join(i) for i in itertools.product(string.ascii_lowercase, repeat = 2)]
+	# characters = ["uv", "uw", "ux", "uy", "uz"]
+>>>>>>> df173061d9f33f3b168d80ecad20ee9b86d4f684
 
 	global main_window
 	main_window = driver.current_window_handle
 	# driver.switch_to_frame('mainFrame')
 	for combo in characters: 
+<<<<<<< HEAD
 		global file
 		file = combo[0]
+=======
+>>>>>>> df173061d9f33f3b168d80ecad20ee9b86d4f684
 		print combo
 		print "\n\n"
 		driver.switch_to_window(main_window)
@@ -264,6 +321,10 @@ def main():
 
 
 		
+<<<<<<< HEAD
+=======
+		
+>>>>>>> df173061d9f33f3b168d80ecad20ee9b86d4f684
 def getXPath(path):
 	try:
 	    element_present = EC.presence_of_element_located((By.XPATH, path))
